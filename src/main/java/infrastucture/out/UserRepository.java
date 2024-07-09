@@ -31,6 +31,31 @@ public class UserRepository implements UserService{
     }
 
     @Override
+    public void updateUser(Long id, String nombre, String email) {
+        String sql = "UPDATE users SET name = ?, email = ? WHERE id = ?";
+        
+        try (Connection connection = DatabaseConfig.getConnection();
+            PreparedStatement statement = connection.prepareStatement(sql)) {
+            
+            statement.setString(1, nombre);
+            statement.setString(2, email);
+            statement.setLong(3, id);
+            
+            int rowsUpdated = statement.executeUpdate();
+            
+            if (rowsUpdated > 0) {
+                System.out.println("User with ID " + id + " updated successfully.");
+            } else {
+                System.out.println("User with ID " + id + " not found.");
+            }
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    @Override
     public User findUserById(Long id) {
         String sql = "SELECT id, name, email FROM users where id = ?";
         User user  = null;
@@ -48,9 +73,34 @@ public class UserRepository implements UserService{
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e);
         }
         return user;
     }
+
+    @Override
+    public void delteUser(Long id) {
+        String sql = "DELETE FROM users WHERE id = ?";
+        
+        try (Connection connection = DatabaseConfig.getConnection();
+            PreparedStatement statement = connection.prepareStatement(sql)) {
+            
+            statement.setLong(1, id);
+            
+            int rowsDeleted = statement.executeUpdate();
+            
+            if (rowsDeleted > 0) {
+                System.out.println("User with ID " + id + " deleted successfully.");
+            } else {
+                System.out.println("User with ID " + id + " not found.");
+            }
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    
 
 }
