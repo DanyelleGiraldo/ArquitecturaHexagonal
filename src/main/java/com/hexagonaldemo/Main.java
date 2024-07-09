@@ -1,6 +1,7 @@
 package com.hexagonaldemo;
 
 import application.CreateUserUseCase;
+import application.DeleteUserUseCase;
 import application.FindUserUseCase;
 import application.UpdateUserUseCase;
 import domain.service.UserService;
@@ -13,7 +14,8 @@ public class Main {
         CreateUserUseCase createUserUseCase = new CreateUserUseCase(userService);
         FindUserUseCase findUserUseCase = new FindUserUseCase(userService); 
         UpdateUserUseCase updateUserUseCase = new UpdateUserUseCase(userService);
-        UserController consoleAdapter = new UserController(createUserUseCase, findUserUseCase, updateUserUseCase); 
+        DeleteUserUseCase deleteUserUseCase = new DeleteUserUseCase(userService);
+        UserController consoleAdapter = new UserController(createUserUseCase, findUserUseCase, updateUserUseCase, deleteUserUseCase); 
 
         consoleAdapter.start();
     }

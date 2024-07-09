@@ -3,6 +3,7 @@ package infrastucture.in;
 import java.util.Scanner;
 
 import application.CreateUserUseCase;
+import application.DeleteUserUseCase;
 import application.FindUserUseCase;
 import application.UpdateUserUseCase;
 import domain.entity.User;
@@ -11,17 +12,19 @@ public class UserController {
     private CreateUserUseCase createUserUseCase;
     private FindUserUseCase findUserUseCase;
     private UpdateUserUseCase updateUserUseCase;
+    private DeleteUserUseCase deleteUserUseCase;
 
-    public UserController(CreateUserUseCase createUserUseCase, FindUserUseCase findUserUseCase, UpdateUserUseCase updateUserUseCase){
+    public UserController(CreateUserUseCase createUserUseCase, FindUserUseCase findUserUseCase, UpdateUserUseCase updateUserUseCase, DeleteUserUseCase deleteUserUseCase){
         this.createUserUseCase = createUserUseCase;
         this.findUserUseCase = findUserUseCase;
         this.updateUserUseCase = updateUserUseCase;
+        this.deleteUserUseCase = deleteUserUseCase;
     }
 
     public void start(){
         Scanner scz = new Scanner(System.in);
 
-        System.out.println("Select your choice \n 1: Create user \n 2: Search user \n 3: Update user");
+        System.out.println("Select your choice \n 1: Create user \n 2: Search user \n 3: Update user \n 4: Delete user");
         int choice = scz.nextInt();
         switch (choice) {
             case 1:
@@ -78,7 +81,18 @@ public class UserController {
                 }
                 break;
             case 4:
-                
+                try(Scanner sl = new Scanner(System.in)){
+                    System.out.println("Enter user id: ");
+                    Long userID = sl.nextLong();
+                    sl.nextLine();
+
+                    User foundUser = findUserUseCase.execute(userID);
+                    if(foundUser != null){
+                        deleteUserUseCase.execute(userID);
+                    } else {
+                        System.out.println("User not found with id: "+ userID);
+                    }
+                }
                 break;
             default:
                 break;
